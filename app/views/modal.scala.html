@@ -1,0 +1,28 @@
+
+@main{
+<!--mainでの2つ目の引数-->
+<div data-role="header">
+ <h1>Todo List <a href="@routes.Application.logout">logout</a>&nbsp; <a href="@routes.Application.login">login</a></h1>
+
+</div>
+
+}{
+  <div class="modal-header">
+    <div class="modal-title">モーダルダイアログ</div>
+  </div>
+  <form role="form" name="modalForm" novalidate>
+    <div class="modal-body">
+        <div class="form-group">
+          <label for="input1">タスク入力欄</label>
+          <input id="input1" class="form-control" type="text" ng-model="input1" placeholder="">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="ok()">OK</button>
+      <button class="btn btn-default" ng-click="cancel()">キャンセル</button>
+    </div>
+  </form>
+
+
+}

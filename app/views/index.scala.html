@@ -1,0 +1,264 @@
+@(tasks: List[Task], taskForm: Form[(String,String,String)])
+<!--[at](gitlogs: List[Gitlog], gitLogForm: Form[(String,String,String)])-->
+@import helper._
+@main{
+<!--mainでの2つ目の引数-->
+<div data-role="header">
+  <nav class="navbar navbar-default ">
+    <div class="navbar-header">
+      <button class="navbar-toggle" data-toggle="collapse" data-target=".target">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href=""><h1>Todoリスト<h1></a>
+    </div>
+    <div class="collapse navbar-collapse target">
+      <ul class="nav navbar-nav">
+        <li ><a href="#calendar">カレンダー</a></li>
+        <li ><a href="#tasklist">タスク一覧</a></li>
+        <li><a href="#git">git連携</a></li>
+        <li><a href="#chart">ガントチャート</a></li>
+        <li><a href="@routes.Application.logout">logout</a></li>
+        <li><a href="@routes.Application.login">login</a></li>
+      </ul>
+    </div>
+
+  </nav>
+
+</div>
+
+}{
+<div data-role="content">
+
+  <div ng-controller="mainCtrl">
+    <div class="span12" id="calendar">
+      <div ui-calendar="uiConfig.calendar"  ng-model="eventSources"></div> 
+
+    </div><!--finish span12-->
+
+    <div class="span4">
+
+      <form  ng-submit="addNew()" ng-controller="mainCtrl">
+
+        <input type="text" ng-model="newTasklabel"  class="input-small" nc-init-focus>
+        <input type="date" ng-model="newTasktarget"   class="input-small">
+
+        <button type="submit"  class="btn btn-primary btn-sm">add task<i class="fa fa-plus"></i></button>
+      </form>
+    </div><!--finish span4-->
+    <div class="span4">
+      <!--progressの一括削除-->
+      <button ng-click="deleteprogress()"  class="btn btn-primary btn-sm">完了したタスクの削除<i class="fa fa-times"></i></button>
+
+
+    </div><!--finish span4-->
+
+    <div class="span8">
+    </div>
+
+    <br><br><br><br><br>
+    <br><br><br><br><br>
+    <div class="span12" id="tasklist">
+      <div class="progress_tasks">
+        <h2>するべきタスクと期日</h2>
+      </div>
+
+      <div class="row">
+        <div class="span4">
+          <ul data-role="listview"  style="list-style:none;">
+            <!--要素の一覧-->
+            <li ng-repeat="task in unchecktasks| orderBy:'target'|limitTo:repeat_limit_uncheck"><!--tasksからひとつずつtaskとしてとりだして繰り返し-->
+
+
+              <div class="wrapper">
+                <div ng-hide="showme" >
+                  <input type="checkbox" ng-model="task.label" ng-change="checkUncheckTask(task.id,task.progress)" ng-checked="task.progress">
+                  <span class="progress-{{task.progress}}">{{task.label}}&nbsp;&nbsp;{{task.target}}&nbsp;&nbsp;by{{task.user_id}}</span>
+                  <!--$index番目から1つ削除-->
+                  <a href ng-click="deleteTask(task.id)"  ><i class="fa fa-times"></i></a>
+                  <a href="" ng-click="showme=true"><i class="fa fa-pencil"></i></a>
+
+                </div>
+
+                <!--editボタンがクリックされたらupdateボタン表示-->
+                <div ng-show="showme">
+                  <!--updateボタン-->
+                  <!--task.modelsはeditを押したときに操作する文字列-->
+                  <form ng-submit="updateTask(task.id,$index)">
+                    <input type="text" ng-model="models[task.id]" ng-init="models[task.id]='{{task.label}}'" class="input-small"> 
+
+                    <input type="submit" value="update" class="btn btn-primary btn-sm">
+                  </form>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <!--<button ng-click="readmore_uncheck()"  class="btn btn-primary btn-sm">{{unchecktasks.length}}もっとよむ:{{repeat_limit_uncheck}},{{readmore_uncheck}}</button>-->
+          <button ng-click="readmore_uncheck()"  class="btn btn-primary btn-sm">もっとよむ</button>
+        </div><!--frinish div class="span4-->
+
+
+        <div class="span4">
+          <ul data-role="listview"  style="list-style:none;">
+            <!--要素の一覧-->
+
+            <li ng-repeat="task in checkedtasks| orderBy:'target'|limitTo:repeat_limit_checked"><!--tasksからひとつずつtaskとしてとりだして繰り返し-->
+
+
+              <div class="wrapper">
+                <div ng-hide="showme" >
+                  <input type="checkbox" ng-model="task.label" ng-change="checkUncheckTask(task.id,task.progress)" ng-checked="task.progress">
+                  <span class="progress-{{task.progress}}">{{task.label}}&nbsp;&nbsp;{{task.target}}&nbsp;&nbsp;by{{task.user_id}}</span>
+                  <!--$index番目から1つ削除-->
+                  <a href ng-click="deleteTask(task.id)"  ><i class="fa fa-times"></i></a>
+                  <a href="" ng-click="showme=true"><i class="fa fa-pencil"></i></a>
+
+                </div>
+
+                <!--editボタンがクリックされたらupdateボタン表示-->
+                <div ng-show="showme">
+                  <!--updateボタン-->
+                  <!--task.modelsはeditを押したときに操作する文字列-->
+                  <form ng-submit="updateTask(task.id,$index)">
+                    <input type="text" ng-model="models[task.id]" ng-init="models[task.id]='{{task.label}}'" class="input-small"> 
+
+                    <input type="submit" value="update" class="btn btn-primary btn-sm">
+                  </form>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <button ng-click="readmore_checked()"  class="btn btn-primary btn-sm">もっとよむ</button>
+
+
+          <br>
+          <br>
+
+        </div><!--frinish div class="span8-->
+        <div class="span4">
+        </div>
+      </div>
+      <br>
+      <br>
+      <br><br><br><br><br>
+      <div class="span12" id="git">
+        <div class="progress_tasks">
+          <h2 > gitのコミットログ&nbsp;&nbsp;
+            &nbsp;&nbsp;
+            <button class="btn btn-primary btn-sm" ng-click="checkCommited()">コミット済みのタスクをチェック</button>
+          </h2>
+        </div>
+        <ul>
+
+          <li ng-repeat="gitlog in gitlogs|limitTo:5">
+
+            {{gitlog.commit.committer.name}}&nbsp;&nbsp;{{gitlog.commit.message}}&nbsp;&nbsp;{{gitlog.commit.committer.date}}
+
+          </li>
+        </ul>
+
+        <form novalidate  ng-submit="getGitLog()" >
+          repository:<input type="text" ng-model="gitrepository"  class="input-small" ng-init="gitrepository">
+          owner:<input type="text" ng-model="gitowner"   class="input-small" ng-init="owner">
+          <button class="btn btn-primary btn-sm" ng-click="addGit()">gitの情報を更新</button>
+        </form>
+
+
+<!--not display mytask
+<div class="progress_tasks">
+<ul data-role="listview"  style="list-style:none;">
+
+<h2>MyTask(user_id:{{user_id}})</h2>
+<li ng-repeat="task in mytasks">
+
+<div class="wrapper">
+<div ng-hide="showme" >
+<input type="checkbox" ng-model="task.progress" ng-change="checkUncheckTask(task.id,task.progress)" ng-checked="task.progress">
+<span class="progress-{{task.progress}}">{{task.label}}&nbsp;&nbsp;{{task.target}}&nbsp;&nbsp;by{{task.user_id}}</span>
+
+<a href ng-click="deleteTask(task.id)"  ><i class="fa fa-times"></i></a>
+<a href="" ng-click="showme=true"><i class="fa fa-pencil"></i></a>
+
+</div>
+
+<div ng-show="showme">
+
+<form ng-submit="updateTask(task.id,$index)">
+<input type="text" ng-model="models[task.id]" ng-init="models[task.id]='{{task.label}}'" class="input-small"> 
+{{task.label}}
+<input type="submit" value="update" class="btn btn-primary btn-sm">
+</form>
+</div>
+</div>
+
+</li>
+</ul>
+</div>
+-->
+<div data-role="footer">
+<br><br><br><br><br>
+<div ng-init="checked=true" id="chart">
+  <label>
+    <input type="checkbox" ng-model="checked" style="float:left; margin-right:10px;" > check me!
+  </label>
+  <div class="check-element animate-show-hide" ng-show="checked" style="clear:both;">
+    <div id="chart"></div><!--チャートを表示-->
+    <div id="timeline" style="width: 900px; height: 1000px;"></div><!--チャートを表示-->
+   <!-- <div class="progress_tasks">
+      <h2>Finished Tasks</h2>
+
+
+      {{progressTasks.label}}
+
+      <ul data-role="listview"  style="list-style:none;">
+        <li ng-repeat="task in checkedtasks">
+          {{task.label}}
+        </li>
+      </ul>
+    </div>-->
+  </div>
+ui-sortable test
+<ul data-as-sortable="board.dragControlListeners" data-ng-model="items">
+   <li data-ng-repeat="task in unchecktasks" data-as-sortable-item>
+      <div data-as-sortable-item-handle>{{task.label}}</div>
+   </li>
+</ul>
+
+
+
+</div><!-- finish div class="span12-->
+</div><!--finish controller-->
+</div><!--finish content-->
+
+
+
+
+<script type="text/ng-template" id="DialogToAdd">
+
+<form ng-submit="addNewFromCalendar()" ng-controller="mainCtrl">
+<input type="text" ng-model="dialogAddLabel"  class="input-small">
+
+<button class="btn btn-primary btn-sm" ng-click="closeThisDialog() ">add task<i class="fa fa-plus"></i></button>
+</form>
+</script>
+<!--
+<form ng-submit="updateTask(task.id,$index)">
+<input type="text" ng-model="models[task.id]" ng-init="models[task.id]='{{task.label}}'" class="input-small"> 
+
+<input type="submit" value="update" class="btn btn-primary btn-sm">
+</form>
+-->
+<script type="text/ng-template" id="DialogToEdit">
+<form ng-submit="editFromCalendar()" ng-controller="mainCtrl">
+<input type="text" ng-model="dialogEditLabel" class="input-small">
+<button class="btn btn-primary btn-sm"  ng-click="closeThisDialog() ">update task<i class="fa fa-plus"></i></button>
+</form>
+</script>
+
+
+}

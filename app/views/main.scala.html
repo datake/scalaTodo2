@@ -1,0 +1,151 @@
+@(header: Html)(content: Html)
+
+<html lang="ja" ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Angularの練習</title>
+
+
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+  <!--load jquery before load bootstrap-->
+
+
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/jquery/dist/jquery.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/jquery-ui/ui/jquery-ui.js")"></script>
+
+  <!--bootstrap,bootstrap-datetimepicker-->
+  <script src="@routes.Assets.at("bower_components/bootstrap/docs/assets/js/bootstrap.js")"></script>
+  <script src="@routes.Assets.at("bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js")"></script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link href="@routes.Assets.at("bower_components/bootstrap/docs/assets/css/bootstrap.css")" rel="stylesheet" media="screen" >
+  <link href="@routes.Assets.at("bower_components/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css")" rel="stylesheet" media="screen" >
+
+  <!--angular,angular-ui-calendar,fullcalendar,angular-animate,calendar-->
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/angular/angular.js")"></script>
+  <script type="text/javascript"src="@routes.Assets.at("bower_components/angular-bootstrap/ui-bootstrap-tpls.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/angular-ui-calendar/src/calendar.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/fullcalendar/fullcalendar.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/fullcalendar/gcal.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/angular-animate/angular-animate.js")"></script>
+
+  <!--ngDialog-->
+  <script type="text/javascript" src="@routes.Assets.at("bower_components/ngDialog/js/ngDialog.js")"></script>
+<link href="@routes.Assets.at("bower_components/ngDialog/css/ngDialog.css")" rel="stylesheet" media="screen" >
+<link href="@routes.Assets.at("bower_components/ngDialog/css/ngDialog-theme-default.css")" rel="stylesheet" media="screen" >
+
+<!--Angular charts-->
+<!--<script type='text/javascript' src="@routes.Assets.at("bower_components/angular/angular.min.js")"></script>
+<script type='text/javascript' src="@routes.Assets.at("bower_components/d3/d3.min.js")"></script> 
+<script type='text/javascript' src="@routes.Assets.at("bower_components/angular-charts/dist/angular-charts.js")"></script>-->
+
+<!--angular-chart.js-->
+<!--
+<script src="@routes.Assets.at("bower_components/Chart.js/Chart.min.js")"></script>
+<script src="@routes.Assets.at("bower_components/angular-chart.js/dist/angular-chart.js")"></script>
+<link rel="stylesheet" href="@routes.Assets.at("bower_components/angular-chart.js/dist/angular-chart.css")">
+ -->
+ <!--angular google chart-->
+ <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+ <!--angular-google-hcart-->
+ <script src="@routes.Assets.at("bower_components/angular-google-chart/ng-google-chart.js")"></script>
+ 
+<!--ng-sortable-->
+ 
+   
+<script src="@routes.Assets.at("bower_components/ng-sortable/dist/ng-sortable.js")"></script>
+<link rel="stylesheet" href="@routes.Assets.at("bower_components/ng-sortable/dist/ng-sortable.css")" media="screen" />
+
+
+  <script src="@routes.Assets.at("javascripts/app/myscript.js")">  </script>
+   <script src="@routes.Assets.at("javascripts/app/mychart.js")">  </script>
+
+
+  <!--
+  <script src="@routes.Assets.at("javascripts/app/factory.js")">  </script>
+   <script src="@routes.Assets.at("javascripts/app/mainCtrl.js")">  </script>
+   <script src="@routes.Assets.at("javascripts/app/calendarCtrl.js")">  </script>
+  -->
+  
+  <link rel="stylesheet" href="@routes.Assets.at("bower_components/fullcalendar/fullcalendar.css")" media="screen" />
+
+
+  <style>
+  h2 {
+    background-color: #D3EDFB;
+  }
+
+  .progress-true,.progress-1 {
+    color:gray;
+    text-decoration:line-through;
+  }
+
+  .progress_tasks h2 {
+    margin: 20px 0 0 0;
+    background: #D3EDFB;
+    font-size: 14px;
+    padding: 5px 0 5px 7px;
+    border-radius:5px 5px 0 0; 
+  }
+
+  .progress_tasks ul {
+    list-style: none;
+    margin: 0;
+    padding: 3px 0 3px 5px;
+    font-size: 12px;
+    border: #ddd solid 1px;
+  }
+
+
+
+  .check-element {
+    style="clear:both;"
+  }
+
+  .animate-show-hide {
+    padding:10px;
+
+    background:white;
+  }
+  .animate-show-hide.ng-hide-add, .animate-show-hide.ng-hide-remove {
+    -webkit-transition:all linear 0.5s;
+    -moz-transition:all linear 0.5s;
+    -o-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+    display:block!important;
+  }
+
+
+  .animate-show-hide.ng-hide-add.ng-hide-add-active,
+  .animate-show-hide.ng-hide-remove {
+    opacity:0;
+  }
+  .animate-show-hide.ng-hide-add,
+  .animate-show-hide.ng-hide-remove.ng-hide-remove-active {
+    opacity:1;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </style>
+</head>
+<body>
+  <div data-role="page" id="home">
+
+    @header
+    @content
+
+
+  </div>
+</body>
+</html>
